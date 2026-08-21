@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Regression Suite" verbose="1" parallel="classes" thread-count="3">
+
+    <listeners>
+        <listener class-name="com.tap.framework.listeners.TestListener"/>
+        <listener class-name="com.tap.framework.listeners.RetryTransformer"/>
+    </listeners>
+
+    <test name="Regression">
+        <groups>
+            <run>
+                <include name="regression"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="com.tap.tests.FormTest"/>
+            <class name="com.tap.tests.AlertsTest"/>
+            <class name="com.tap.tests.WindowsTest"/>
+            <class name="com.tap.tests.TablesTest"/>
+            <class name="com.tap.tests.MouseInteractionsTest"/>
+            <class name="com.tap.tests.DatePickerTest"/>
+            <class name="com.tap.tests.FileUploadTest"/>
+            <class name="com.tap.tests.ElementsTest"/>
+        </classes>
+    </test>
+</suite>

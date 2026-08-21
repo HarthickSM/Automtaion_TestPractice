@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Devin QA",
+    "email": "devin.qa@example.com",
+    "phone": "9876543210",
+    "gender": "male",
+    "days": ["monday", "wednesday", "friday"],
+    "country": "India",
+    "animals": ["Cat", "Dog"]
+  },
+  {
+    "name": "Priya S",
+    "email": "priya.s@example.com",
+    "phone": "9123456780",
+    "gender": "female",
+    "days": ["sunday", "saturday"],
+    "country": "Canada",
+    "animals": ["Lion", "Zebra"]
+  }
+]
