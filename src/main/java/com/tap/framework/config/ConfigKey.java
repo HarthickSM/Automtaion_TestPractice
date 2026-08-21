@@ -18,7 +18,9 @@ public enum ConfigKey {
     REPORT_TITLE("report.title"),
     SCREENSHOT_ON_FAILURE("screenshot.on.failure"),
     SCREENSHOT_ON_PASS("screenshot.on.pass"),
-    RETRY_COUNT("retry.count");
+    RETRY_COUNT("retry.count"),
+    SELF_HEALING("self.healing"),
+    SELF_HEALING_MIN_SCORE("self.healing.min.score");
 
     private final String key;
 

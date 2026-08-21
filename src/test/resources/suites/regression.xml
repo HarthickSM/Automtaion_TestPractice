@@ -22,6 +22,7 @@
             <class name="com.tap.tests.DatePickerTest"/>
             <class name="com.tap.tests.FileUploadTest"/>
             <class name="com.tap.tests.ElementsTest"/>
+            <class name="com.tap.tests.SelfHealingTest"/>
         </classes>
     </test>
 </suite>

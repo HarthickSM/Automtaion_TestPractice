@@ -13,6 +13,7 @@ public final class FrameworkConstants {
     public static final String REPORT_DIR = OUTPUT_DIR + File.separator + "reports";
     public static final String SCREENSHOT_DIR = OUTPUT_DIR + File.separator + "screenshots";
     public static final String DOWNLOAD_DIR = OUTPUT_DIR + File.separator + "downloads";
+    public static final String HEALING_DIR = OUTPUT_DIR + File.separator + "healing";
     public static final String TEST_DATA_DIR =
             USER_DIR + File.separator + "src" + File.separator + "test" + File.separator + "resources"
                     + File.separator + "testdata";

@@ -1,20 +1,32 @@
 package com.tap.framework.pages;
 
 import com.tap.framework.base.BasePage;
+import com.tap.framework.healing.SmartBy;
 import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-/** "Form" widget: text inputs, radio buttons, check boxes and the three select lists. */
+/**
+ * "Form" widget: text inputs, radio buttons, check boxes and the three select lists. Locators are
+ * {@link SmartBy}, so a renamed id is repaired from the declared fallback or from the stored
+ * element fingerprint instead of failing the test.
+ */
 public class FormPage extends BasePage {
 
-    private static final By NAME = By.id("name");
-    private static final By EMAIL = By.id("email");
-    private static final By PHONE = By.id("phone");
-    private static final By ADDRESS = By.id("textarea");
-    private static final By COUNTRY = By.id("country");
-    private static final By COLORS = By.id("colors");
-    private static final By ANIMALS = By.id("animals");
+    private static final By NAME =
+            SmartBy.of("form.name", By.id("name"), By.cssSelector("input[placeholder='Enter Name']"));
+    private static final By EMAIL =
+            SmartBy.of("form.email", By.id("email"), By.cssSelector("input[placeholder='Enter EMail']"));
+    private static final By PHONE =
+            SmartBy.of("form.phone", By.id("phone"), By.cssSelector("input[placeholder='Enter Phone']"));
+    private static final By ADDRESS =
+            SmartBy.of("form.address", By.id("textarea"), By.cssSelector("textarea"));
+    private static final By COUNTRY =
+            SmartBy.of("form.country", By.id("country"), By.cssSelector("select#country"));
+    private static final By COLORS =
+            SmartBy.of("form.colors", By.id("colors"), By.cssSelector("select[multiple]#colors"));
+    private static final By ANIMALS =
+            SmartBy.of("form.animals", By.id("animals"), By.cssSelector("select[multiple]#animals"));
 
     public FormPage(WebDriver driver) {
         super(driver);

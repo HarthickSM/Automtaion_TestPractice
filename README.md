@@ -61,6 +61,7 @@ mvn test -Drun.mode=remote -Dgrid.url=http://localhost:4444/wd/hub -Dbrowser=chr
 | Artifact | Location |
 | --- | --- |
 | Extent HTML report | `test-output/reports/ExtentReport.html` |
+| Locator fingerprints (self healing) | `test-output/healing/locator-repository.json` |
 | Failure screenshots | `test-output/screenshots/` |
 | Log file | `test-output/logs/automation.log` |
 | TestNG native report | `target/surefire-reports/` |
@@ -74,6 +75,7 @@ src/main/java/com/tap/framework
 ├── constants     Output/report/screenshot/test-data paths
 ├── driver        BrowserType, DriverFactory (local + Grid), DriverManager (ThreadLocal driver)
 ├── exceptions    FrameworkException
+├── healing       SmartBy, HealingEngine, LocatorRepository, ElementSnapshot, HealingLog
 ├── listeners     TestListener, ExtentManager, RetryAnalyzer, RetryTransformer
 ├── pages         Page objects, one per widget group of the site
 └── utils         WaitUtils, ElementActions, JavaScriptUtils, ScreenshotUtils,
@@ -91,8 +93,41 @@ src/test/resources/testdata        FormTestData.xlsx, formData.json
   ignores `StaleElementReferenceException`/`NoSuchElementException`; `ElementActions` waits before
   every interaction and falls back to a JavaScript click when a native click is intercepted.
 * **Retry** – `RetryTransformer` applies `RetryAnalyzer` to every test; `retry.count` controls it.
+* **Self healing locators** – see the section below.
 * **Data driven** – `TestDataProviders` feeds tests from Excel sheets and JSON files, so new cases
   are added by editing data, not code.
+
+## Self healing locators
+
+`SmartBy` is a normal `By`, so it works with every wait, `Select` and page object, but it resolves
+in three stages:
+
+```java
+private static final By NAME =
+        SmartBy.of("form.name", By.id("name"), By.cssSelector("input[placeholder='Enter Name']"));
+```
+
+1. **Primary locator** – when it matches, the element's fingerprint (tag, id, name, class, type,
+   placeholder, text) is stored in `test-output/healing/locator-repository.json`, which survives
+   between runs.
+2. **Declared fallbacks** – tried in order when the primary matches nothing.
+3. **Fingerprint match** – `HealingEngine` scores every element with the same tag against the
+   stored fingerprint (id 0.30, name 0.20, text 0.15, class 0.15, type 0.10, placeholder 0.10,
+   averaged over the attributes the fingerprint actually captured) and takes the best match at or
+   above `self.healing.min.score`.
+
+If nothing scores high enough the locator still fails, so a genuinely removed element is never
+silently swapped for a lookalike. Every repair is logged and added as a warning to the test's node
+in the Extent report, so a healed run is visibly different from a clean one.
+
+```properties
+self.healing=true          # -Dself.healing=false to fail fast instead
+self.healing.min.score=0.6
+```
+
+`SelfHealingTest` proves it end to end: it renames ids in the live DOM with JavaScript and asserts
+the tests keep driving the right elements (a renamed `email` field is recovered on a 77%
+fingerprint match).
 
 ## Coverage
 
@@ -100,7 +135,8 @@ Form (text inputs, radio buttons, checkboxes, single/multi selects), date picker
 read-only jQuery UI with month/year dropdowns, HTML5 range), alerts (simple/confirm/prompt),
 windows and popups, mouse interactions (hover menu, double click, drag & drop, slider, dynamic
 START/STOP button), tables (static, dynamic, paginated), file upload (single + multiple), links and
-broken links, scrollable combo box, footer form sections, shadow DOM and nested shadow DOM.
+broken links, scrollable combo box, footer form sections, shadow DOM and nested shadow DOM, plus
+the self healing locator layer itself.
 
 ## Adding a test
 
